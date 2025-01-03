@@ -90,17 +90,60 @@ class BusinessSerializer(serializers.ModelSerializer):
     class Meta:
         model = Business
         fields = "__all__"
-        
+
 class EventInterestedSerializer(serializers.ModelSerializer):
     pass
 class EventSerializer(serializers.ModelSerializer):
     pass
 class PackageSubscriptionSerializer(serializers.ModelSerializer):
-    pass
+    subscription_users = UserSerializer(source='subscription_user',read_only=True)
+
+    class Meta:
+        model = PackageSubscription
+        fields = '__all__'
+
 class PackageCommentSerializer(serializers.ModelSerializer):
-    pass
+    commented_by = serializers.CharField(source='commented_by.username',read_only=True)
+
+    class Meta:
+        model = PackageComment
+        fields = '__all__'
+
 class PackageSerializer(serializers.ModelSerializer):
-    pass
+    label = LabelSerializer(many=True, required=False)
+    # user = serializers.JSONField(source='created_by', read_only=True)
+    reviews = PackageCommentSerializer( many=True, read_only=True)
+    # subscribedby_set = PackageSubscriptionSerializer(source='subscription', many=True, read_only=True)
+    # business_data = BusinessSerializer(source="business",read_only=True)
+    interested_users = serializers.SerializerMethodField()
+    def get_interested_users(self, obj):
+        interested_users = PackageSubscription.objects.filter(package=obj).values_list('subscribed_by__username', flat=True)
+        return list(interested_users)
+    # def to_representation(self, instance):
+    #     representation = super().to_representation(instance)
+    #     # Rename 'base_user' to 'user' in the serialized output
+    #     business_data= representation.pop('business_data', None)
+    #     representation['business'] =business_data
+    #     return representation
+    def create(self, validated_data):
+        # Extract the nested data for instructor feedback
+        print(validated_data)
+        labels = validated_data.pop("label", None)
+
+        # validated_data.push('base_user',user)
+        package = Package.objects.create(**validated_data)
+
+        if labels is not None:
+            for label in labels:
+                label_instance, created = Label.objects.get_or_create(**label)
+                package.label.add(label_instance.pk)
+        package.save()
+        return package
+
+    class Meta:
+        model = Package
+        fields = "__all__"
+
 class PostCommentSerializer(serializers.ModelSerializer):
     commented_by = serializers.CharField(source='commented_by.username')
 
@@ -151,4 +194,30 @@ class PostSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class GuideSerializer(serializers.ModelSerializer):
-    pass
+    label = LabelSerializer(many=True,read_only=True,required=False)
+    # interests = serializers.StringRelatedField()
+    base_user = UserSerializer()
+
+    def create(self, validated_data):
+        # Extract the nested data for instructor feedback
+        print(validated_data)
+        interests = validated_data.pop("interests", None)
+        user_data = validated_data.pop("base_user", None)
+        # # Create the student instance
+
+        user_key = User(username=user_data["username"], password=user_data["password"])
+        user_key.save()
+
+        # validated_data.push('base_user',user)
+        guide = Guide.objects.create(base_user=user_key, **validated_data)
+
+        if interests is not None:
+
+            for interest in interests:
+                label, created = Label.objects.get_or_create(**interest)
+                guide.interests.add(label.pk)
+        guide.save()
+        return guide
+    class Meta:
+        model = Guide
+        fields ="__all__"
