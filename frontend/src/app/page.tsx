@@ -6,7 +6,7 @@ import Hero from "./components/Hero";
 import NavBar from "./components/NavBar";
 import Service from "./components/Service";
 import Testimonial from "./components/Testimonial";
-import SidebarDemo from "./components/Sidebar";
+// import SidebarDemo from "./components/Sidebar";
 
 export default function Home() {
   return (
