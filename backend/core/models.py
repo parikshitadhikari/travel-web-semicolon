@@ -16,13 +16,25 @@ class Label(models.Model):
         return self.name
 # Post model for handling User posts.
 class Post(models.Model):
-    pass
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now=True)
+    base_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    img = models.ImageField(upload_to='core/post/images', null=True, blank=True)
+    label = models.ManyToManyField(Label,blank=True)
+    def __str__(self):
+        return self.description
 # Model for handling Post comments.
 class PostComment(models.Model):
-    pass
+    post = models.ForeignKey(Post, on_delete=models.CASCADE,related_name="comments")
+    comment = models.CharField(max_length=255)
+    commented_by = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.comment
 # Model for handling Post likes.
 class PostLike(models.Model):
-    pass
+    post = models.ForeignKey(Post, on_delete=models.CASCADE,related_name="likes")
+    liked_by = models.OneToOneField(User, on_delete=models.CASCADE)
 
 class Travellers(models.Model):
     pass
