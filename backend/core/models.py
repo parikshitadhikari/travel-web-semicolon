@@ -77,8 +77,17 @@ class PackageComment(models.Model):
     package = models.ForeignKey(Package, on_delete=models.CASCADE)
     commented_by = models.OneToOneField(User, on_delete=models.CASCADE)
     comment = models.TextField()
-    
+
 class Event(models.Model):
-    pass
+    name = models.CharField(max_length=255)
+    label = models.ManyToManyField(Label)
+    img = models.ImageField(upload_to='core/events/images', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User,on_delete=models.CASCADE)
+    # price = models.FloatField(default=0.0)
+    description= models.TextField(blank=True, default="")
+    # guide = models.ForeignKey(Guide, on_delete=models.CASCADE, null=True, default=None)
+
 class EventInterested(models.Model):
-    pass
+    event = models.ForeignKey(Event,on_delete=models.CASCADE)
+    interested_user = models.OneToOneField(User,on_delete=models.CASCADE)
