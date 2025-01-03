@@ -3,9 +3,16 @@ from .models import Business,  EventInterested, Guide, PackageComment, PackageSu
 
 
 class UserSerializer(serializers.ModelSerializer):
-    pass
+    class Meta:
+        model = User
+        fields = "__all__"
+        extra_kwargs = {"password": {"write_only": True}}
+
 class LabelSerializer(serializers.ModelSerializer):
-    pass
+    class Meta:
+        model = Label
+        fields = "__all__"
+        
 class TravellersSerializer(serializers.ModelSerializer):
     pass
 class SimpleBusinessSerializer(serializers.ModelSerializer):
