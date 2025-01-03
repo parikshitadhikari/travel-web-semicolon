@@ -1,7 +1,12 @@
 import { BackgroundBeams } from "@/components/ui/background-beams";
-import NavBar from "./components/NavBar";
-import Hero from "./components/Hero";
 import Box from "./components/Box";
+import Feature from "./components/Feature";
+import Footer from "./components/Footer";
+import Hero from "./components/Hero";
+import NavBar from "./components/NavBar";
+import Service from "./components/Service";
+import Testimonial from "./components/Testimonial";
+import SidebarDemo from "./components/Sidebar";
 
 export default function Home() {
   return (
@@ -14,6 +19,10 @@ export default function Home() {
           <NavBar />
           <Hero />
           <Box />
+          <Service />
+          <Feature />
+          <Testimonial />
+          <Footer />
         </div>
       </div>
     </div>
