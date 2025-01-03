@@ -14,7 +14,42 @@ class LabelSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class TravellersSerializer(serializers.ModelSerializer):
-    pass
+    # interests = serializers.StringRelatedField()  # Serializes labels as a list of Label objects
+    # interests = serializers.SerializerMethodField()
+    interests = LabelSerializer(many=True, required=False)
+    # interests = serializers.StringRelatedField()
+    base_user = UserSerializer()
+    selected_destinations = serializers.SerializerMethodField()
+    def get_selected_destinations(self, obj):
+        packages = Package.objects.filter(packagesubscription__subscribed_by=obj.base_user)
+    
+    # Serialize the package objects
+        return PackageSerializer(packages, many=True).data
+    def create(self, validated_data):
+        # Extract the nested data for instructor feedback
+        print(validated_data)
+        interests = validated_data.pop("interests", None)
+        user_data = validated_data.pop("base_user", None)
+        # # Create the student instance
+
+        user_key = User(username=user_data["username"], password=user_data["password"])
+        user_key.save()
+
+        # validated_data.push('base_user',user)
+        traveller = Travellers.objects.create(base_user=user_key, **validated_data)
+
+        if interests is not None:
+
+            for interest in interests:
+                label, created = Label.objects.get_or_create(**interest)
+                traveller.interests.add(label.pk)
+        traveller.save()
+        return traveller
+
+    class Meta:
+        model = Travellers
+        fields = "__all__"
+        
 class SimpleBusinessSerializer(serializers.ModelSerializer):
     pass
 class PackageSerializer(serializers.ModelSerializer):

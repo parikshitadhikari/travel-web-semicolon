@@ -37,7 +37,11 @@ class PostLike(models.Model):
     liked_by = models.OneToOneField(User, on_delete=models.CASCADE)
 
 class Travellers(models.Model):
-    pass
+    base_user = models.ForeignKey(User,on_delete=models.CASCADE)
+    interests = models.ManyToManyField(Label,blank=True)
+    def __str__(self):
+        return self.base_user.username
+    
 class Business(models.Model):
     pass
 class Guide(models.Model):
