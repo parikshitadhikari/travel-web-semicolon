@@ -48,7 +48,13 @@ class Business(models.Model):
         return self.base_user.username
     
 class Guide(models.Model):
-    pass
+    base_user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="Guide")
+    label = models.ManyToManyField(Label)
+    image = models.ImageField(upload_to='core/giude/profile',null=True,blank=True)
+    
+    def __str__(self):
+        return self.base_user.username
+    
 class Package(models.Model):
     name = models.CharField(max_length=255)
     label = models.ManyToManyField(Label)
@@ -61,9 +67,17 @@ class Package(models.Model):
         return self.name
     
 class PackageSubscription(models.Model):
-    pass
+    package = models.ForeignKey(Package, on_delete=models.CASCADE)
+    subscribed_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    class Meta:
+        unique_together = [['package','subscribed_by']]
+
 class PackageComment(models.Model):
-    pass
+    package = models.ForeignKey(Package, on_delete=models.CASCADE)
+    commented_by = models.OneToOneField(User, on_delete=models.CASCADE)
+    comment = models.TextField()
+    
 class Event(models.Model):
     pass
 class EventInterested(models.Model):
