@@ -6,6 +6,7 @@ import { Menu, MenuItem } from "@/components/ui/navbar-menu";
 import { IconLogin2, IconLogout2 } from "@tabler/icons-react";
 import Image from "next/image";
 import favicon from "../../assets/favicon.png";
+import logo from "../../../public/images/favicon.png";
 
 const NavBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -28,7 +29,8 @@ const NavBar = () => {
           className="flex items-center space-x-3 rtl:space-x-reverse"
         >
           <Image
-            src={favicon}
+            // src={favicon}
+            src={logo}
             alt="logo here"
             className="w-16 h-16"
           />
