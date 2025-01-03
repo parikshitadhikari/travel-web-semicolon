@@ -43,11 +43,22 @@ class Travellers(models.Model):
         return self.base_user.username
     
 class Business(models.Model):
-    pass
+    base_user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="Business")
+    def __str__(self):
+        return self.base_user.username
+    
 class Guide(models.Model):
     pass
 class Package(models.Model):
-    pass
+    name = models.CharField(max_length=255)
+    label = models.ManyToManyField(Label)
+    business = models.ForeignKey(Business,related_name="packages",on_delete=models.CASCADE)
+    img = models.ImageField(upload_to='core/post/images', null=True, blank=True)
+    price = models.FloatField(default=0.0)
+    description= models.TextField(blank=True, default="")
+    guide = models.ForeignKey(Guide, on_delete=models.CASCADE, null=True)
+    def __str__(self):
+        return self.name
     
 class PackageSubscription(models.Model):
     pass

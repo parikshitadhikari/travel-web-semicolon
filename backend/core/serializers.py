@@ -49,13 +49,48 @@ class TravellersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Travellers
         fields = "__all__"
-        
+
 class SimpleBusinessSerializer(serializers.ModelSerializer):
-    pass
+    class Meta:
+        model = Business
+        fields = ["id", "username", "email"]  # Include only essential fields
+
 class PackageSerializer(serializers.ModelSerializer):
-    pass
+    # interests = serializers.StringRelatedField()  # Serializes labels as a list of Label objects
+    # interests = serializers.SerializerMethodField()
+    # interests = LabelSerializer(many=True,required= False)
+    # interests = serializers.StringRelatedField()
+    # base_user = UserSerializer()
+    business = SimpleBusinessSerializer()
+
+    def create(self, validated_data):
+        # Extract the nested data for instructor feedback
+        print(validated_data)
+        label = validated_data.pop("label", None)
+
+        # validated_data.push('base_user',user)
+        package = Package.objects.create(**validated_data)
+
+        if label is not None:
+
+            for i in label:
+                label, created = Label.objects.get_or_create(**i)
+                package.interests.add(label.pk)
+        package.save()
+        return package
+
+    class Meta:
+        model = Package
+        fields = "__all__"
+
 class BusinessSerializer(serializers.ModelSerializer):
-    pass
+    # packages = PackageSerializer(many=True, read_only=True)  # Include related packages
+    # packages = serializers.SerializerMethodField()
+    base_user_data = UserSerializer(read_only=True,source= "base_user")
+    class Meta:
+        model = Business
+        fields = "__all__"
+        
 class EventInterestedSerializer(serializers.ModelSerializer):
     pass
 class EventSerializer(serializers.ModelSerializer):
