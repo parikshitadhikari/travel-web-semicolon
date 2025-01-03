@@ -1,12 +1,17 @@
 import { BackgroundBeams } from "@/components/ui/background-beams";
-import { div } from "framer-motion/client";
-import Image from "next/image";
+import NavBar from "./components/NavBar";
 
 export default function Home() {
   return (
     <div>
-      hi
-      <BackgroundBeams></BackgroundBeams>
+      <div className="">
+        <BackgroundBeams />
+      </div>
+      <div className="z-10">
+        <div>
+          <NavBar />
+        </div>
+      </div>
     </div>
   );
 }
