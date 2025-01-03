@@ -1,6 +1,5 @@
 import { GiDiscussion } from "react-icons/gi";
-import { MdInterests } from "react-icons/md";
-import { SiPowerpages } from "react-icons/si";
+import { MdInterests, MdPages } from "react-icons/md";
 import { FaRocket } from "react-icons/fa";
 
 /**
@@ -27,7 +26,7 @@ const Feature = () => {
     },
     {
       id: 3,
-      icon: <SiPowerpages className="bg-blue-300 text-6xl p-3 rounded-full" />,
+      icon: <MdPages className="bg-blue-300 text-6xl p-3 rounded-full" />,
       title: "Expand Your Horizons",
       description:
         "Discover new travel opportunities and expand your travel plans.",
