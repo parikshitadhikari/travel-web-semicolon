@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FaImage } from "react-icons/fa";
 import axios from "axios";
-const staticUser = "Rohan";
+
 /**
  * Props for CreatePost component.
  * @typedef {Object} Props
@@ -21,13 +21,18 @@ const CreatePost = ({ onPostSubmit }: Props) => {
   const [postContent, setPostContent] = useState("");
   const [image, setImage] = useState<File | null>(null);
 
+  // Retrieve user information from localStorage or set a default value.
+  const staticUser = localStorage.getItem("userInfo") 
+    ? JSON.parse(localStorage.getItem("userInfo") as string).username 
+    : "Guest";
+
   /**
    * Handles the submission of the post.
    */
   const handleSubmit = async () => {
     const formData = new FormData();
     formData.append("description", postContent);
-    formData.append("username",staticUser );
+    formData.append("username", staticUser);
     formData.append("label", JSON.stringify(["Music", "Moosic"]));
     if (image) {
       formData.append("img", image);
@@ -40,7 +45,6 @@ const CreatePost = ({ onPostSubmit }: Props) => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            // Authorization: `Bearer ${localStorage.getItem("token")}`, // Replace with your token retrieval logic
           },
         }
       );
@@ -63,7 +67,7 @@ const CreatePost = ({ onPostSubmit }: Props) => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setImage(e.target.files[0]);
-    } 
+    }
   };
 
   return (
