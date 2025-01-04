@@ -44,7 +44,7 @@ const Traverce: React.FC = () => {
         ) : tripDetails.length > 0 ? (
           <FocusCards cards={tripDetails} />
         ) : (
-          <p className="text-center text-white">No destinations found.</p>
+          <p className="text-center text-white">No items found.</p>
         )}
       </div>
     </>
