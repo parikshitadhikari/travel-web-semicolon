@@ -2,7 +2,7 @@
 
 import { FiUser } from "react-icons/fi";
 import { FaRobot } from "react-icons/fa";
-import { Message } from "../../(frontend)/travelAI/page"; 
+import { Message } from "../../(frontend)/travelAI/page";
 
 interface Props {
   messages: Message[];
@@ -22,6 +22,24 @@ const Chat = ({ messages }: Props) => {
       </div>
     );
   }
+  const formatMessage = (text: string) => {
+    const parts = text.split(/(\*\*.*?\*\*)/g); // Split text by bold markers (**word**)
+    return parts.map((part, index) => {
+      if (part.startsWith("**") && part.endsWith("**")) {
+        const boldText = part.slice(2, -2); // Remove '**' from the bold part
+        return (
+          <p key={index} className="font-bold">
+            {boldText}
+          </p>
+        );
+      }
+      return (
+        <p key={index} className="whitespace-pre-wrap">
+          {part}
+        </p>
+      );
+    });
+  };
 
   return (
     <div className="flex flex-col w-full px-3 py-5 overflow-y-auto space-y-4 ">
@@ -29,14 +47,14 @@ const Chat = ({ messages }: Props) => {
         <div
           key={index}
           className={`flex ${
-            message.username === "User" ? "justify-end" : "justify-start"
+            message.username === "User" ? "justify-end" : "justify-start ml-12"
           } items-end gap-2`}
         >
           {message.username !== "User" && (
             <div className="flex items-end">
               <FaRobot className="text-2xl text-green-500 mr-2" />
               <div className="max-w-lg break-words p-3 rounded-lg shadow-lg bg-white text-gray-800">
-                <p>{message.message}</p>
+                {formatMessage(message.message)}
               </div>
             </div>
           )}

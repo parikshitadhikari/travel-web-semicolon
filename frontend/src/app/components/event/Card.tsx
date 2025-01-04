@@ -26,7 +26,7 @@ export default function ExpandableCardDemo() {
     input?.length > 10 ? `${input.substring(0, 10)}` : input;
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo") as string);
-  const staticUsername = userInfo.base_user.username; // Static username for the API request
+  const staticUsername = userInfo.base_user.username // Static username for the API request
   // const staticUsername = "rohan"
   // Fetch data from API and transform it to match the Card structure
   useEffect(() => {

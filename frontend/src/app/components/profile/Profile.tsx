@@ -61,7 +61,8 @@ const ProfilePageComponent = () => {
             </h1>
             <p className="text-gray-600">Travel Enthusiast & Blogger</p>
             <p className="text-gray-600">
-              {userData.base_user.email || "you@example.com"}
+              {userData.base_user.email ||
+                "you@example.com"}
             </p>
             <p className="text-gray-600">Based in: New York, USA</p>
           </div>
@@ -78,9 +79,9 @@ const ProfilePageComponent = () => {
             About Me
           </h2>
           <p className="text-gray-600 leading-relaxed">
-            Hi! I'm a passionate traveler who has visited over 30
-            countries. I love exploring new cultures, cuisines, and landscapes,
-            and I enjoy sharing my travel experiences with others.
+            Hi! I'm a passionate traveler who has visited over 30 countries. I
+            love exploring new cultures, cuisines, and landscapes, and I enjoy
+            sharing my travel experiences with others.
           </p>
         </motion.div>
 

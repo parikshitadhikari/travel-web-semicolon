@@ -22,9 +22,9 @@ const CreatePost = ({ onPostSubmit }: Props) => {
   const [image, setImage] = useState<File | null>(null);
 
   // Retrieve user information from localStorage or set a default value.
-  const staticUser = localStorage.getItem("userInfo") 
-    ? JSON.parse(localStorage.getItem("userInfo") as string).base_user.username 
-    : "Guest";
+  const staticUser = localStorage.getItem("userInfo")
+    ? JSON.parse(localStorage.getItem("userInfo") as string).base_user
+        .username    : "Guest";
 
   /**
    * Handles the submission of the post.

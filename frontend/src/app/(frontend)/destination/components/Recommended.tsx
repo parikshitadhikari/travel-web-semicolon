@@ -1,9 +1,8 @@
 "use client";
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect } from "react";
 import ItenariesCard from "./ItenariesCard";
 import "@mantine/core/styles.css";
 import { Carousel } from "@mantine/carousel";
-import mockPlaces from "../data/mockPlaces";
 import axios from "axios";
 interface Label {
   id: number;
@@ -39,22 +38,17 @@ const Recommended = () => {
 
         if (storedUserInfo) {
           const userInfo: UserInfo = JSON.parse(storedUserInfo);
-          const interestIds = userInfo.interests.map((interest: any) => interest.id);
 
           if (userInfo.interests) {
             const response = await axios.get(
-              "http://127.0.0.1:8000/auth/destination"
+              "http://127.0.0.1:8000/auth/destination/"
             );
 
-            console.log("Response::::", response.data);
-            
-            // Filter places where any label matches any user interest
-            const recommendedPlaces = response.data.filter((place: any) =>
-              place.label.some((label: any) => interestIds.includes(label.id))
+            const recommendedPlaces = response.data.filter((place: Place) =>
+              place.label.some((label) =>
+                userInfo.interests.includes(label.name)
+              )
             );
-
-            console.log("Recommended Places::::", recommendedPlaces);
-            console.log("User Interests::::", userInfo.interests);
 
             setFilteredPlaces(recommendedPlaces);
           }

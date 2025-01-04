@@ -75,14 +75,18 @@ const SignUp: React.FC = () => {
       return;
     }
 
+    const base_user = {
+      username,
+      email,
+      password,
+    }
     const newUser = {
       username,
       password,
       email,
       interests: selectedInterests,
+      base_user
     };
-    console.log(newUser);
-
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/auth/travellers/create_user/",
@@ -103,6 +107,7 @@ const SignUp: React.FC = () => {
     } catch (error: any) {
       console.error("Error signing up:", error);
     }
+    localStorage.setItem("userInfo", JSON.stringify(newUser));
   };
 
   const handleInterestChange = (interest: string) => {

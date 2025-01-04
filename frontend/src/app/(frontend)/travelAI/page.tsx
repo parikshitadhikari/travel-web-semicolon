@@ -57,7 +57,8 @@ const GrowAI = () => {
 
     // Fetch the AI's response
     const aiMessage = await askGrowAI(msg);
-    const growAIMessage = { username: "GrowAI", message: aiMessage };
+    // console.log(aiMessage.response)
+    const growAIMessage = { username: "GrowAI", message: aiMessage.response };
 
     // Update the last loading message with the AI's response
     setMessages((currentMessages) => {
