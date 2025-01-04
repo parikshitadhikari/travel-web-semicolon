@@ -11,7 +11,7 @@ import Testimonial from "./components/Testimonial";
 export default function Home() {
   return (
     <div>
-      <div className="">
+      <div>
         <BackgroundBeams />
       </div>
       <div className="z-10">
