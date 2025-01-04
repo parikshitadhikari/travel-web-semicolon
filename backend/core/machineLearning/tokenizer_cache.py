@@ -1,5 +1,5 @@
 import os
-from tf_keras.preprocessing.text import Tokenizer
+
 from django.conf import settings
 
 from core.machineLearning.is_management_command import is_management_command
@@ -12,6 +12,7 @@ class TokenizerCache:
     def get_tokenizer(cls):
         if is_management_command():
             return None  # Skip tokenizer loading during management commands
+        from tf_keras.preprocessing.text import Tokenizer
         if cls._tokenizer is None:
             with open(cls._data_path, "r") as file:
                 data = [line.strip() for line in file]
