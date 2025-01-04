@@ -1,6 +1,4 @@
 import os
-from tf_keras.models import load_model
-from tf_keras.preprocessing.text import Tokenizer
 from django.conf import settings
 from core.machineLearning.is_management_command import is_management_command
 
@@ -12,6 +10,8 @@ class ModelCache:
     def get_model(cls):
         if is_management_command():
             return None  # Skip model loading during management commands
+        from tf_keras.models import load_model
+        from tf_keras.preprocessing.text import Tokenizer
         if cls._model is None:
             cls._model = load_model(cls._model_path)
         return cls._model

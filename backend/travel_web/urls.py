@@ -19,10 +19,11 @@ from django.urls import path,include
 from . import settings
 from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-
+from core.business_admin import business_admin_site
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('auth/',include('core.urls'))
+    path('auth/',include('core.urls')),
+    path('business-admin/', business_admin_site.urls),
     
 ]
 
