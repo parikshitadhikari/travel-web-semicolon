@@ -1,28 +1,31 @@
-// components/ProfilePage.tsx
 "use client";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 const ProfilePageComponent = () => {
   const [userData, setUserData] = useState<any>({
-    username: "",
+    base_user: "",
     email: "",
     password: "",
     interests: [],
     mood: "",
   });
+
   const destinations = [
     {
-      name: userData.interests[0] || "place1",
+      name: userData.interests[0]?.name || "place1",
       image: "/images/travelling.jpg",
     },
-    { name: userData.interests[1] || "place2", image: "/images/everest.jpeg" },
     {
-      name: userData.interests[2] || "place3",
+      name: userData.interests[1]?.name || "Sagarmatha",
+      image: "/images/everest.jpeg",
+    },
+    {
+      name: userData.interests[2]?.name || "Himal",
       image: "/images/logo-travel-web.jpg",
     },
-    // { name: 'Sydney', image: '#' },
   ];
+  
 
   useEffect(() => {
     const storedData = localStorage.getItem("userInfo");
@@ -54,11 +57,11 @@ const ProfilePageComponent = () => {
           />
           <div>
             <h1 className="text-3xl font-bold text-gray-800">
-              {userData.username || "Traveler"}
+              {userData.base_user.username || "Traveler"}
             </h1>
             <p className="text-gray-600">Travel Enthusiast & Blogger</p>
             <p className="text-gray-600">
-              {userData.email || "you@example.com"}
+              {userData.base_user.email || "you@example.com"}
             </p>
             <p className="text-gray-600">Based in: New York, USA</p>
           </div>
@@ -75,7 +78,7 @@ const ProfilePageComponent = () => {
             About Me
           </h2>
           <p className="text-gray-600 leading-relaxed">
-            Hi! I'm John, a passionate traveler who has visited over 30
+            Hi! I'm a passionate traveler who has visited over 30
             countries. I love exploring new cultures, cuisines, and landscapes,
             and I enjoy sharing my travel experiences with others.
           </p>
