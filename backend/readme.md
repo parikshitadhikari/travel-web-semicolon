@@ -236,3 +236,17 @@ Handles event-related operations.
     ```
 - **GET** `auth/events/interested/`
 - -Returns a list of interested users
+
+## ChatViewSet (chat)
+Chat with chatbot
+
+### ENDPOINTS
+- **POST** `/auth/chat/`
+  -  prompt chatbot
+   - **Request Body:**
+    ```json
+    {
+
+      "prompt" :"Your Prompt"
+    }
+    ```
