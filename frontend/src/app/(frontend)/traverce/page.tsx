@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import SidebarDemo from "@/app/components/Sidebar";
 import axios from "axios";
+import { FocusCards } from "@/components/ui/focus-cards";
 
 interface Destination {
   id: number;
@@ -33,28 +34,28 @@ const Traverce: React.FC = () => {
 
   const username = userData?.username;
 
-  useEffect(() => {
-    const fetchDestinations = async () => {
-      if (!username) {
-        console.error("Username not found");
-        setLoading(false);
-        return;
-      }
+  // useEffect(() => {
+  //   const fetchDestinations = async () => {
+  //     if (!username) {
+  //       console.error("Username not found");
+  //       setLoading(false);
+  //       return;
+  //     }
 
-      try {
-        const response = await axios.get(
-          `http://127.0.0.1:8000/auth/travellers/${username}/`
-        );
-        setDestinations(response.data.selected_destinations);
-      } catch (error) {
-        console.error("Error fetching destinations:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  //     try {
+  //       const response = await axios.get(
+  //         `http://127.0.0.1:8000/auth/travellers/${username}/`
+  //       );
+  //       setDestinations(response.data.selected_destinations);
+  //     } catch (error) {
+  //       console.error("Error fetching destinations:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchDestinations();
-  }, [username]);
+  //   fetchDestinations();
+  // }, [username]);
 
   const handleExplore = async (destinationId: number) => {
     try {
@@ -90,6 +91,16 @@ const Traverce: React.FC = () => {
     );
   };
 
+  const cards = [
+    {
+      title: "Forest Adventure",
+      src: "https://images.unsplash.com/photo-1518710843675-2540dd79065c?q=80&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      price: 1000,
+      description:
+        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Reiciendis vero, maxime at odit impedit dolores quibusdam quae illo eveniet dolorem, consectetur suscipit tempore odio rem est nemo cupiditate. Doloribus, tenetur?",
+    },
+  ];
+
   return (
     <>
       <SidebarDemo />
@@ -97,35 +108,10 @@ const Traverce: React.FC = () => {
         <h1 className="text-center text-white text-4xl font-bold mb-6">
           Explore Your Destination
         </h1>
-        {loading ? (
-          <p className="text-center">Loading...</p>
-        ) : destinations.length > 0 ? (
-          <div className="destination-selector bg-white rounded-lg shadow-lg p-6 m-4 max-w-md mx-auto">
-            <h2 className="text-xl font-semibold">Select a Destination</h2>
-            <select
-              onChange={handleDestinationSelect}
-              value={selectedDestinationId ?? ""}
-              className="mt-2 bg-gray-100 p-2 rounded w-full"
-            >
-              <option value="" disabled>
-                -- Select a Destination --
-              </option>
-              {destinations.map((destination) => (
-                <option key={destination.id} value={destination.id}>
-                  {destination.name}
-                </option>
-              ))}
-            </select>
-            {tripDetails && ( // Display trip details as bullet points
-              <div className="mt-4 p-4 border border-gray-300 rounded-lg bg-gray-50">
-                <h4 className="font-semibold text-lg mb-5">Trip Requirements:</h4>
-                {renderTripDetails(tripDetails)}
-              </div>
-            )}
-          </div>
-        ) : (
+        <div>
+          <FocusCards cards={cards} />
           <p className="text-center">No destination found.</p>
-        )}
+        </div>
       </div>
     </>
   );
