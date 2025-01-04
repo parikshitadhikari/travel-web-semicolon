@@ -28,44 +28,81 @@ const SignUp: React.FC = () => {
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const router = useRouter();
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  // const handleFormSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+
+  //   const existingUser = mockUsers.find(
+  //     (user) => user.email === email && user.email !== "rohan@gmail.com"
+  //   );
+  //   if (existingUser) {
+  //     toast.error("User already exists");
+  //     return;
+  //   }
+  //   if (password !== confirmPassword) {
+  //     toast.error("Passwords donot match");
+  //     return;
+  //   }
+  //   const newUser = {
+  //     username,
+  //     email,
+  //     password,
+  //     interests: selectedInterests,
+  //   };
+
+  //   mockUsers.push(newUser);
+
+  //   localStorage.setItem("userInfo", JSON.stringify(newUser));
+  //   router.push("/community-post");
+  //   try {
+  //     axios.post(
+  //       "http://127.0.0.1:8000/auth/travellers/create_user/",
+  //       JSON.stringify(newUser),
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           // Authorization: `Bearer ${localStorage.getItem("token")}`, // Replace with your token retrieval logic
+  //         },
+  //       }
+  //     );
+  //   } catch (e) {}
+  //   toast.success("User successfully signed up.");
+  // };
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const existingUser = mockUsers.find(
-      (user) => user.email === email && user.email !== "rohan@gmail.com"
-    );
-    if (existingUser) {
-      toast.error("User already exists");
-      return;
-    }
     if (password !== confirmPassword) {
-      toast.error("Passwords donot match");
+      toast.error("Passwords do not match");
       return;
     }
+
     const newUser = {
       username,
-      email,
       password,
+      email,
       interests: selectedInterests,
     };
+    console.log(newUser);
 
-    mockUsers.push(newUser);
-
-    localStorage.setItem("userInfo", JSON.stringify(newUser));
-    router.push("/community-post");
     try {
-      axios.post(
+      const response = await axios.post(
         "http://127.0.0.1:8000/auth/travellers/create_user/",
-        JSON.stringify(newUser),
+        newUser,
         {
           headers: {
             "Content-Type": "application/json",
-            // Authorization: `Bearer ${localStorage.getItem("token")}`, // Replace with your token retrieval logic
           },
         }
       );
-    } catch (e) {}
-    toast.success("User successfully signed up.");
+
+      if (response.status === 200) {
+        toast.success("User successfully signed up!");
+        router.push("/community-post");
+      } else {
+        toast.error("Signup failed. Please try again.");
+      }
+    } catch (error: any) {
+      console.error("Error signing up:", error);
+    }
   };
 
   const handleInterestChange = (interest: string) => {
