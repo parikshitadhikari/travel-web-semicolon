@@ -93,6 +93,16 @@ class TravellersViewSet(viewsets.ModelViewSet):
     @action(
         methods=["POST"], permission_classes=[], authentication_classes=[], detail=False
     )
+    def login(self,request):
+        data = request.data
+        email = data['email']
+        traveller = Travellers.objects.get(base_user__email = email)
+        serializer = self.serializer_class(traveller)
+        return Response(status=status.HTTP_200_OK,data=serializer.data)
+    
+    @action(
+        methods=["POST"], permission_classes=[], authentication_classes=[], detail=False
+    )
     def create_user(self, request, *args, **kwargs):
         data = request.data
         base_user = {
@@ -100,14 +110,6 @@ class TravellersViewSet(viewsets.ModelViewSet):
             "password": data["password"],
             "email": data["email"],
         }
-        data = request.data
-        base_user = {
-            "username": data["username"],
-            "password": data["password"],
-            "email": data["email"],
-        }
-        data["base_user"] = base_user
-        interests = data["interests"]
         data["base_user"] = base_user
         interests = data["interests"]
         # print(interests)
@@ -115,21 +117,16 @@ class TravellersViewSet(viewsets.ModelViewSet):
 
         data["interests"] = []
 
-        data["interests"] = []
         for interest in interests:
             # print(interest)
-            data["interests"].append({"name": interest})
-
             data["interests"].append({"name": interest})
 
         # data['interests']=None
         # print(data)
         # print(data['interests'])
         traveller_serializer = self.serializer_class(data=data)
-        traveller_serializer = self.serializer_class(data=data)
         traveller_serializer.is_valid(raise_exception=True)
         traveller = traveller_serializer.save()
-        print(traveller)
 
 
         return Response(status=status.HTTP_200_OK)
