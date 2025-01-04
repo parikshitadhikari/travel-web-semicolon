@@ -553,30 +553,50 @@ from rest_framework.views import APIView
 from rest_framework import status
 import openai
 from django.conf import settings
-
+from openai import OpenAI
+import json
+client = OpenAI(
+    api_key=settings.OPENAI_API_KEY,  # This is the default and can be omitted
+)
 class ChatBotApiView(APIView):
+    authentication_classes=[]
+    permission_classes=[]
+    
+    
     def post(self, request):
-        openai.api_key = settings.OPENAI_API_KEY
 
-        # Get user input from the request
+
         user_input = request.data.get('prompt', None)
         if not user_input:
             return Response({"error": "Message is required"}, status=status.HTTP_400_BAD_REQUEST)
         
         try:
-            # Call OpenAI API
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
+
+            response = client.chat.completions.create(
+                model="gpt-4o",
                 messages=[
                     {"role": "system", "content": "You are a helpful travel assistant."},
                     {"role": "user", "content": user_input},
                 ],
                 max_tokens=1000,
-                temperature=0.7
+                temperature=0.7,
+
             )
-            # Extract the response content
-            chat_response = response['choices'][0]['message']['content']
-            return Response({"response": chat_response}, status=status.HTTP_200_OK)
+
+            return Response({"response": response.choices[0].message.content}, status=status.HTTP_200_OK)
         
-        except openai.error.OpenAIError as e:
+        except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+def extract_message(response):
+    try:
+        # Navigate to the message content
+        choices = response["response"][1][1]
+        for choice in choices:
+            for key, value in choice:
+                if key == "message":
+                    for msg_key, msg_value in value:
+                        if msg_key == "content":
+                            return msg_value
+        return "Can't connect to TravelAI right now."
+    except Exception as e:
+        return f"Error parsing response: {str(e)}"

@@ -256,3 +256,9 @@ Chat with chatbot
       "prompt" :"Your Prompt"
     }
     ```
+  - **Response Format:**
+  ```json
+  {
+    "response":chat response
+  }
+  ```
