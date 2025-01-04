@@ -112,6 +112,7 @@ class TravellersViewSet(viewsets.ModelViewSet):
             "password": data["password"],
             "email": data["email"],
         }
+        # base_user = User(username = data['username'],password = data['password'],email = data['email'])
         data["base_user"] = base_user
         interests = data["interests"]
         # print(interests)

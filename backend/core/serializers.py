@@ -32,7 +32,7 @@ class TravellersSerializer(serializers.ModelSerializer):
         user_data = validated_data.pop("base_user", None)
         # # Create the student instance
 
-        user_key = User(username=user_data["username"], password=user_data["password"])
+        user_key = User(username=user_data["username"], password=user_data["password"],email = user_data['email'])
         user_key.save()
 
         # validated_data.push('base_user',user)
