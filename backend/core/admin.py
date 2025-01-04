@@ -78,5 +78,14 @@ class PostCommentAdmin(admin.ModelAdmin):
 
 @admin.register(Package)
 class PackageAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("id", "name",  "price", )
+    search_fields = ("name", )
+    filter_horizontal = ("label",)
 
+@admin.register(PackageComment)
+class PackageCommentAdmin(admin.ModelAdmin):
+    list_display=("id","comment","commented_by__username")
+
+@admin.register(PackageSubscription)
+class PackageSubscriptionAdmin(admin.ModelAdmin):
+    list_display=("package","subscribed_by")
