@@ -150,30 +150,20 @@ class BusinessViewSet(viewsets.ModelViewSet):
         base_user = {"username": data["username"], "password": data["password"]}
         data["base_user"] = base_user
         interests = data["interests"]
-        data = request.data
-        base_user = {"username": data["username"], "password": data["password"]}
-        data["base_user"] = base_user
-        interests = data["interests"]
         # print(interests)
         # traveller_serializer.
-
-        data["interests"] = []
 
         data["interests"] = []
         for interest in interests:
             # print(interest)
             data["interests"].append({"name": interest})
 
-            data["interests"].append({"name": interest})
-
         # data['interests']=None
         # print(data)
         # print(data['interests'])
         traveller_serializer = self.serializer_class(data=data)
-        traveller_serializer = self.serializer_class(data=data)
         traveller_serializer.is_valid(raise_exception=True)
         traveller = traveller_serializer.save()
-        print(traveller)
 
 
         return Response(status=status.HTTP_200_OK)
@@ -189,7 +179,6 @@ class PackageViewSet(viewsets.ModelViewSet):
 
     def get_traveller(username):
         user = User.objects.get(username=username)
-        traveller = Travellers.objects.get(base_user=user.pk)
         traveller = Travellers.objects.get(base_user=user.pk)
         return traveller
 
@@ -417,32 +406,21 @@ class EventViewSet(viewsets.ModelViewSet):
         methods=["POST"], permission_classes=[], authentication_classes=[], detail=False
     )
     def create_event(self, request, *args, **kwargs):
-
-
         data = request.data
         labels = data["label"]
-        labels = data["label"]
-        # print(interests)
-        # event_serializer.
-        data["created_by"] = User.objects.get(username=data["username"]).pk
 
         data["label"] = []
         data["created_by"] = User.objects.get(username=data["username"]).pk
 
-        data["label"] = []
         for label in labels:
-            # print(interest)
-            data["label"].append({"name": label})
-
             data["label"].append({"name": label})
 
         # data['interests']=None
         # print(data)
         # print(data['interests'])
         event_serializer = self.serializer_class(data=data)
-        event_serializer = self.serializer_class(data=data)
-        event_serializer.is_valid()
-        event = event_serializer.save()
+        event_serializer.is_valid(raise_exception=True)
+        event_serializer.save()
         # print(event)
 
         return Response(status=status.HTTP_200_OK)
