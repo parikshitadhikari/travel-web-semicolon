@@ -2,10 +2,13 @@
 import React, { useState } from "react";
 import mockUsers from "../data/mockUsers";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const router = useRouter()
+
   const handleFormSubmit = (e: any) => {
     e.preventDefault();
     const user = mockUsers.find(
@@ -13,6 +16,7 @@ const Login = () => {
     );
     if (user) {
       localStorage.setItem("userInfo", JSON.stringify(user));
+      router.push("/community-post");
       toast.success("User successfully logged in.");
     } else {
       toast.error("Invalid credentials.");
