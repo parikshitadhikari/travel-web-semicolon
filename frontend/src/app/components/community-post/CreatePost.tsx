@@ -23,7 +23,7 @@ const CreatePost = ({ onPostSubmit }: Props) => {
 
   // Retrieve user information from localStorage or set a default value.
   const staticUser = localStorage.getItem("userInfo") 
-    ? JSON.parse(localStorage.getItem("userInfo") as string).username 
+    ? JSON.parse(localStorage.getItem("userInfo") as string).base_user.username 
     : "Guest";
 
   /**
