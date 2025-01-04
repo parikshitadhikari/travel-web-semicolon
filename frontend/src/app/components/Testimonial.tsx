@@ -46,12 +46,12 @@ const Testimonial = () => {
               return (
                 <div
                   key={id}
-                  className="card h-[17rem] w-[18rem] rounded-md shadow-lg flex flex-col space-y-3  bg-gray-50"
+                  className="card h-[14rem] w-[22rem] rounded-md shadow-lg flex flex-col space-y-3  bg-gray-50"
                 >
-                  <div className="desc h-[35%] mx-8 mt-10 mb-3 text-gray-500  bg-gray-50">
+                  <div className="desc h-[35%] mx-8 mt-10 text-gray-500  bg-gray-50">
                     {description}
                   </div>
-                  <div className="h-[20%] flex  flex-row">
+                  <div className="h-[20%] flex flex-row">
                     <div className="personImage w-[40px] mr-5 flex justify-center items-center mx-5">
                       <img
                         src={personImage}
