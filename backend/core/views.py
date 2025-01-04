@@ -150,30 +150,20 @@ class BusinessViewSet(viewsets.ModelViewSet):
         base_user = {"username": data["username"], "password": data["password"]}
         data["base_user"] = base_user
         interests = data["interests"]
-        data = request.data
-        base_user = {"username": data["username"], "password": data["password"]}
-        data["base_user"] = base_user
-        interests = data["interests"]
         # print(interests)
         # traveller_serializer.
-
-        data["interests"] = []
 
         data["interests"] = []
         for interest in interests:
             # print(interest)
             data["interests"].append({"name": interest})
 
-            data["interests"].append({"name": interest})
-
         # data['interests']=None
         # print(data)
         # print(data['interests'])
         traveller_serializer = self.serializer_class(data=data)
-        traveller_serializer = self.serializer_class(data=data)
         traveller_serializer.is_valid(raise_exception=True)
         traveller = traveller_serializer.save()
-        print(traveller)
 
 
         return Response(status=status.HTTP_200_OK)
@@ -189,7 +179,6 @@ class PackageViewSet(viewsets.ModelViewSet):
 
     def get_traveller(username):
         user = User.objects.get(username=username)
-        traveller = Travellers.objects.get(base_user=user.pk)
         traveller = Travellers.objects.get(base_user=user.pk)
         return traveller
 
