@@ -25,11 +25,8 @@
     "react": "19.0.0",
     "react-chartjs-2": "^5.3.0",
     "react-dom": "19.0.0",
-<<<<<<< HEAD
-=======
     "react-icons": "^5.4.0",
     "react-toastify": "^11.0.2",
->>>>>>> 4966b34038919e14c63987d38a8f7ac70aa161ba
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7"
   },
