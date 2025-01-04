@@ -6,6 +6,8 @@ from django.contrib.auth.models import AbstractUser
 
 # Custom User model extending Django's AbstractUser
 class User(AbstractUser):
+    username = models.CharField(max_length=255,unique=True)
+    email = models.EmailField(unique=True)
     def __str__(self):
         return self.username
     
