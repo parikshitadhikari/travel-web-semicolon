@@ -436,9 +436,10 @@ class EventViewSet(viewsets.ModelViewSet):
         if(request.method=="POST"):
             
             data =request.data
-            user = User.objects.get(username=data['username'])
+            # user = User.objects.get(username=data['username'])
+            user = get_object_or_404(User,username = data['username'])
             # comment = data['comment']
-            event = Event.objects.get(id= data['id'])
+            event = get_object_or_404(Event,id= data['id'])
             event_interested_data={
                 
             }
@@ -487,27 +488,6 @@ class EventViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_200_OK)
         # return super().create(request, *args, **kwargs
 
-# import google.generativeai as genai
-# import os
-# from dotenv import load_dotenv
-# load_dotenv()
-# genai.configure(api_key=os.environ.get("API_KEY"))
-# class ChatbotViewSet(viewsets.ModelViewSet):
-#     authentication_classes = []
-#     permission_classes = []
-#     queryset=None
-#     def create(self, request, *args, **kwargs):
-#         prompt = request.data['prompt']
-# #         curl \
-# #   -H 'Content-Type: application/json' \
-# #   -d '{"contents":[{"parts":[{"text":"Explain how AI works"}]}]}' \
-# #   -X POST 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=YOUR_API_KEY'
-#         model = genai.GenerativeModel("gemini-1.5-flash")
-#         response = model.generate_content(prompt)
-#         # print(response.text)
-
-#         return Response(data=response.text,status=status.HTTP_200_OK)
-#         # return super().list(request, *args, **kwargs)
 
 class TraverseViewSet(viewsets.ModelViewSet):
     authentication_classes = []
@@ -566,3 +546,37 @@ class GuideViewSet(viewsets.ModelViewSet):
 
         return Response(status=status.HTTP_200_OK)
         # return super().create(request, *args, **kwargs)
+
+
+# views.py
+from rest_framework.views import APIView
+from rest_framework import status
+import openai
+from django.conf import settings
+
+class ChatBotApiView(APIView):
+    def post(self, request):
+        openai.api_key = settings.OPENAI_API_KEY
+
+        # Get user input from the request
+        user_input = request.data.get('prompt', None)
+        if not user_input:
+            return Response({"error": "Message is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            # Call OpenAI API
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "You are a helpful travel assistant."},
+                    {"role": "user", "content": user_input},
+                ],
+                max_tokens=1000,
+                temperature=0.7
+            )
+            # Extract the response content
+            chat_response = response['choices'][0]['message']['content']
+            return Response({"response": chat_response}, status=status.HTTP_200_OK)
+        
+        except openai.error.OpenAIError as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -174,3 +174,79 @@ Create destination or get a list of destination
 - **POST/GET** `auth/traverse/`
 - post :post a traverse item
 - get : get list of traverse items
+
+
+
+
+## EventViewSet
+Handles event-related operations.
+
+### Endpoints
+
+- **GET** `auth/events/`
+  - Returns a list of all events.
+  Event:
+  ```json
+  {
+    "name":
+    "label": [{
+      "name":"label1"
+    },
+    {
+      "name":"label2"
+    }
+    ]
+    "img":
+    "created_at":
+    "user":{
+      "username":username of user
+      "id":userid
+    }
+    "description":
+  }
+  ```  
+
+- **GET** `auth/events/recommendations/`
+  - Returns event recommendations for the authenticated traveller.
+  - **Request Body:**
+    ```json
+    {
+      "username": "traveller123"
+    }
+    ```
+
+- **POST** `auth/events/create_event/`
+  - Creates a new event with associated labels.
+  - **Request Body:**
+    ```json
+    {
+      "name": "Event Name",
+      "label": ["label1", "label2"],
+      "username":"Username of creator"
+    }
+    ```
+- **POST** `auth/events/interested/`
+-Creates a interest on a event.
+  - **Request Body:**
+    ```json
+    {
+      "id": id of the event in number,
+      "username":"Username of the interested user"
+    }
+    ```
+- **GET** `auth/events/interested/`
+- -Returns a list of interested users
+
+## ChatViewSet (chat)
+Chat with chatbot
+
+### ENDPOINTS
+- **POST** `/auth/chat/`
+  -  prompt chatbot
+   - **Request Body:**
+    ```json
+    {
+
+      "prompt" :"Your Prompt"
+    }
+    ```
