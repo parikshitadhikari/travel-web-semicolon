@@ -3,8 +3,8 @@ from rest_framework import viewsets,status,permissions,authentication
 from rest_framework.response import Response
 from rest_framework.decorators import api_view,action
 
-from core.models import Business, Event, Guide, Package, PackageSubscription, Post, PostComment, Travellers, User
-from core.serializers import BusinessSerializer, EventInterestedSerializer, EventSerializer, GuideSerializer, PackageCommentSerializer, PackageSerializer, PackageSubscriptionSerializer, PostSerializer, TravellersSerializer, UserSerializer
+from core.models import Business, Event, Guide, Package, PackageSubscription, Post, PostComment, Travellers, TraverseItem, User
+from core.serializers import BusinessSerializer, EventInterestedSerializer, EventSerializer, GuideSerializer, PackageCommentSerializer, PackageSerializer, PackageSubscriptionSerializer, PostSerializer, TravellersSerializer, TraverseItemSerializer, UserSerializer
 from django.shortcuts import get_object_or_404
 from django.db.models import Count
 
@@ -448,25 +448,30 @@ class EventViewSet(viewsets.ModelViewSet):
 #         return Response(data=response.text,status=status.HTTP_200_OK)
 #         # return super().list(request, *args, **kwargs)
 
-# class TraverseViewSet(viewsets.ModelViewSet):
-#     authentication_classes = []
-#     permission_classes = []
-#     queryset=None
-#     def create(self, request, *args, **kwargs):
-#         # prompt = request.data['prompt']
-#         package_id = request.data['id']
-#         package =Package.objects.get(id=package_id)
-#         #         curl \
-#         #   -H 'Content-Type: application/json' \
-#         #   -d '{"contents":[{"parts":[{"text":"Explain how AI works"}]}]}' \
-#         #   -X POST 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=YOUR_API_KEY'
-#         model = genai.GenerativeModel("gemini-1.5-flash")
-#         prompt = f"I am going on the package(travel): {package.name}. It's description is {package.description}. Give required equipments and its price for this trip. Stricly only give me short points on what equipments i need. Nothing more nothing less.Parse data and give in 10 nice points. No extra text just the 10 points starting with 1,2,3 and so on.Dont say Here are 10 essential items for your Kathmandu Durbar Square trip"
-#         response = model.generate_content(prompt)
-#         # print(response.text)
+class TraverseViewSet(viewsets.ModelViewSet):
+    authentication_classes = []
+    permission_classes = []
+    queryset=TraverseItem.objects.all()
+    serializer_class = TraverseItemSerializer
+    # def create(self, request, *args, **kwargs):
+    #     # prompt = request.data['prompt']
+    #     package_id = request.data['id']
+    #     package =Package.objects.get(id=package_id)
+    #     #         curl \
+    #     #   -H 'Content-Type: application/json' \
+    #     #   -d '{"contents":[{"parts":[{"text":"Explain how AI works"}]}]}' \
+    #     #   -X POST 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=YOUR_API_KEY'
+    #     model = genai.GenerativeModel("gemini-1.5-flash")
+    #     prompt = f"I am going on the package(travel): {package.name}. It's description is {package.description}. Give required equipments and its price for this trip. Stricly only give me short points on what equipments i need. Nothing more nothing less.Parse data and give in 10 nice points. No extra text just the 10 points starting with 1,2,3 and so on.Dont say Here are 10 essential items for your Kathmandu Durbar Square trip"
+    #     response = model.generate_content(prompt)
+    #     # print(response.text)
 
-#         return Response(data=response.text,status=status.HTTP_200_OK)
-#         # return super().list(request, *args, **kwargs)
+    #     return Response(data=response.text,status=status.HTTP_200_OK)
+    
+        # return super().list(request, *args, **kwargs)
+
+    
+
 
 class GuideViewSet(viewsets.ModelViewSet):
     authentication_classes = []

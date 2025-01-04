@@ -3,6 +3,7 @@ from django.contrib import admin
 # Register your models here.
 from .models import (
     PackageComment,
+    TraverseItem,
     User,
     Label,
     Travellers,
@@ -89,3 +90,8 @@ class PackageCommentAdmin(admin.ModelAdmin):
 @admin.register(PackageSubscription)
 class PackageSubscriptionAdmin(admin.ModelAdmin):
     list_display=("package","subscribed_by")
+    
+    
+@admin.register(TraverseItem)
+class TraverseItemAdmin(admin.ModelAdmin):
+    pass
