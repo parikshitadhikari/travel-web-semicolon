@@ -130,3 +130,42 @@ Handles user posts and provides recommendations.
 
     }
     ```
+
+
+## Destination 
+Create destination or get a list of destination
+- **POST**  `/auth/destination/create_destination/`
+- Data Format:
+- {
+  "name": "Package Name",
+  "label": [
+    "label1",
+    "label2"
+  ],
+  "price": 100,
+  "description": "Package Description",
+  "username": "rohan",
+}
+- **GET** `/auth/destination`
+- Get list of destination
+
+
+- **POST** `auth/destination/subscribe/`
+-Creates a interest on a event.
+  - **Request Body:**
+    ```json
+    {
+      "id": id of the destination in number,
+      "username":"Username of the interested user"
+    }
+    ```
+- **GET** `auth/destination/subscribe/`
+- -Returns a list of interested users
+
+- **POST** `auth/traverse/`
+- Ask for preparation and equipments
+ ```json
+  {
+    "id": id of the package,
+  }
+```
