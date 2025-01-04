@@ -3,8 +3,8 @@ from rest_framework import viewsets,status,permissions,authentication
 from rest_framework.response import Response
 from rest_framework.decorators import api_view,action
 
-from backend.core.models import Business, Event, Guide, Package, PackageSubscription, Post, PostComment, Travellers, User
-from backend.core.serializers import BusinessSerializer, EventInterestedSerializer, EventSerializer, GuideSerializer, PackageCommentSerializer, PackageSerializer, PackageSubscriptionSerializer, PostSerializer, TravellersSerializer, UserSerializer
+from core.models import Business, Event, Guide, Package, PackageSubscription, Post, PostComment, Travellers, User
+from core.serializers import BusinessSerializer, EventInterestedSerializer, EventSerializer, GuideSerializer, PackageCommentSerializer, PackageSerializer, PackageSubscriptionSerializer, PostSerializer, TravellersSerializer, UserSerializer
 
 from django.db.models import Count
 
