@@ -45,6 +45,12 @@ class GuideAdmin(admin.ModelAdmin):
     search_fields = ("base_user__username", "base_user__email")
     filter_horizontal = ("label",)
 
+# Register Business
+@admin.register(Business)
+class BusinessAdmin(admin.ModelAdmin):
+    list_display = ("id", "base_user__username", "base_user__email")
+    search_fields = ("base_user__username", "base_user__email")
+    
 # Register Event
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
@@ -59,3 +65,12 @@ class EventLikeAdmin(admin.ModelAdmin):
     list_display = ("id", "event", "interested_user")
     search_fields = ("event__name", "interested_user__username")
 
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    list_display = ("id", "description")
+    search_fields = ("description",)
+    filter_horizontal = ("label",)
+
+@admin.register(PostComment)
+class PostCommentAdmin(admin.ModelAdmin):
+    list_display=("id","comment","commented_by__username")
