@@ -92,7 +92,7 @@ class BusinessSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class EventInterestedSerializer(serializers.ModelSerializer):
-    interested_user = UserSerializer(read_only=True)
+    # interested_user = UserSerializer(read_only=True)
 
     class Meta:
         model = EventInterested
