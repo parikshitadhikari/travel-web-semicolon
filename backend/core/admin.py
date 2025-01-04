@@ -74,3 +74,9 @@ class PostAdmin(admin.ModelAdmin):
 @admin.register(PostComment)
 class PostCommentAdmin(admin.ModelAdmin):
     list_display=("id","comment","commented_by__username")
+
+
+@admin.register(Package)
+class PackageAdmin(admin.ModelAdmin):
+    pass
+
