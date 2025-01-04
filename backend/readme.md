@@ -169,3 +169,8 @@ Create destination or get a list of destination
     "id": id of the package,
   }
 ```
+
+## Traverse
+- **POST/GET** `auth/traverse/`
+- post :post a traverse item
+- get : get list of traverse items

@@ -90,3 +90,10 @@ class Event(models.Model):
 class EventInterested(models.Model):
     event = models.ForeignKey(Event,on_delete=models.CASCADE)
     interested_user = models.OneToOneField(User,on_delete=models.CASCADE)
+
+class TraverseItem(models.Model):
+    name = models.CharField(max_length=255)
+    src = models.ImageField(upload_to='core/traverse/images',null=True,blank = True)
+    price = models.FloatField()
+    description = models.TextField()
+

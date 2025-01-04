@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Business,  EventInterested, Guide, PackageComment, PackageSubscription, Post, User, Travellers, Label, Package, Event,PostComment,PostLike
+from .models import Business,  EventInterested, Guide, PackageComment, PackageSubscription, Post, TraverseItem, User, Travellers, Label, Package, Event,PostComment,PostLike
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -259,3 +259,8 @@ class GuideSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guide
         fields ="__all__"
+        
+class TraverseItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TraverseItem
+        fields = "__all__"
