@@ -37,7 +37,7 @@ const Traverce: React.FC = () => {
       <SidebarDemo />
       <div className="bg-gradient-to-br from-blue-500 to-blue-200 min-h-screen p-8">
         <h1 className="text-center text-white text-4xl font-bold mb-6">
-          Explore Your Destination
+          Travel Ecommerce
         </h1>
         {loading ? (
           <p className="text-center text-white">Loading destinations...</p>
