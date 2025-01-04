@@ -3,8 +3,8 @@ from rest_framework import viewsets,status,permissions,authentication
 from rest_framework.response import Response
 from rest_framework.decorators import api_view,action
 
-from backend.core.models import Business, Guide, Package, PackageSubscription, Post, PostComment, Travellers, User
-from backend.core.serializers import BusinessSerializer, PackageCommentSerializer, PackageSerializer, PackageSubscriptionSerializer, PostSerializer, TravellersSerializer, UserSerializer
+from backend.core.models import Business, Event, Guide, Package, PackageSubscription, Post, PostComment, Travellers, User
+from backend.core.serializers import BusinessSerializer, EventInterestedSerializer, EventSerializer, GuideSerializer, PackageCommentSerializer, PackageSerializer, PackageSubscriptionSerializer, PostSerializer, TravellersSerializer, UserSerializer
 
 from django.db.models import Count
 
@@ -324,3 +324,203 @@ class PackageViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_501_NOT_IMPLEMENTED)
         #not implemented
 
+class EventViewSet(viewsets.ModelViewSet):
+    authentication_classes = []
+    permission_classes = []
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+
+    def get_traveller(username):
+        user = User.objects.get(username=username)
+        traveller = Travellers.objects.get(base_user=user.pk)
+        traveller = Travellers.objects.get(base_user=user.pk)
+        return traveller
+
+    @action(methods=["GET"], detail=False)
+    def recommendations(self, request):
+        traveller = self.get_traveller(request.data["username"])
+        matching_users = (
+            Event.objects.filter(label__name__in=traveller.interests)
+            .annotate(matched_labels=Count("label"))
+            .order_by("-matched_labels")
+        )
+    @action(
+        methods=["POST","GET"], permission_classes=[], authentication_classes=[], detail=False
+    )
+    def interested(self, request, *args, **kwargs):
+        if(request.method=="POST"):
+            
+            data =request.data
+            user = User.objects.get(username=data['username'])
+            # comment = data['comment']
+            event = Event.objects.get(id= data['id'])
+            event_interested_data={
+                
+            }
+            event_interested_data['event']= event.pk
+            event_interested_data['interested_user']= user.pk
+            event_interested_seralizer = EventInterestedSerializer(data= event_interested_data)
+            event_interested_seralizer.is_valid(raise_exception=True)
+            event_interested_seralizer.save()
+            return Response(status=status.HTTP_201_CREATED)
+        else:
+            data = request.data
+            event_id = data['id']
+            event = Event.objects.get(id= event_id)
+            # interested_users = event.eventinterested_set.all().values_list('interested_user',flat=True)
+            interested_users = User.objects.filter(eventinterested__event=event)
+# Serialize the user data
+            return Response(status=status.HTTP_200_OK, data=UserSerializer(interested_users, many=True).data)
+            # return Response(status=status.HTTP_200_OK,data=UserSerializer(interested_users,many=True).data)
+
+    @action(methods=["GET"], detail=False)
+    def recommendations(self, request):
+        traveller = self.get_traveller(request.data["username"])
+        matching_users = (
+            Event.objects.filter(label__name__in=traveller.interests)
+            .annotate(matched_labels=Count("label"))
+            .order_by("-matched_labels")
+        )
+    @action(
+        methods=["POST","GET"], permission_classes=[], authentication_classes=[], detail=False
+    )
+    def interested(self, request, *args, **kwargs):
+        if(request.method=="POST"):
+            
+            data =request.data
+            user = User.objects.get(username=data['username'])
+            # comment = data['comment']
+            event = Event.objects.get(id= data['id'])
+            event_interested_data={
+                
+            }
+            event_interested_data['event']= event.pk
+            event_interested_data['interested_user']= user.pk
+            event_interested_seralizer = EventInterestedSerializer(data= event_interested_data)
+            event_interested_seralizer.is_valid(raise_exception=True)
+            event_interested_seralizer.save()
+            return Response(status=status.HTTP_201_CREATED)
+        else:
+            data = request.data
+            event_id = data['id']
+            event = Event.objects.get(id= event_id)
+            # interested_users = event.eventinterested_set.all().values_list('interested_user',flat=True)
+            interested_users = User.objects.filter(eventinterested__event=event)
+# Serialize the user data
+            return Response(status=status.HTTP_200_OK, data=UserSerializer(interested_users, many=True).data)
+            # return Response(status=status.HTTP_200_OK,data=UserSerializer(interested_users,many=True).data)
+    # @action(methods=["GET"],detail=False)
+    # def trending(self,request):
+    #     traveller =self.get_traveller(request.data['username'])
+    # @action(
+    #     methods=["POST"], permission_classes=[], authentication_classes=[], detail=False
+    # )
+    @action(
+        methods=["POST"], permission_classes=[], authentication_classes=[], detail=False
+    )
+    def create_event(self, request, *args, **kwargs):
+
+
+        data = request.data
+        labels = data["label"]
+        labels = data["label"]
+        # print(interests)
+        # event_serializer.
+        data["created_by"] = User.objects.get(username=data["username"]).pk
+
+        data["label"] = []
+        data["created_by"] = User.objects.get(username=data["username"]).pk
+
+        data["label"] = []
+        for label in labels:
+            # print(interest)
+            data["label"].append({"name": label})
+
+            data["label"].append({"name": label})
+
+        # data['interests']=None
+        # print(data)
+        # print(data['interests'])
+        event_serializer = self.serializer_class(data=data)
+        event_serializer = self.serializer_class(data=data)
+        event_serializer.is_valid()
+        event = event_serializer.save()
+        # print(event)
+
+        return Response(status=status.HTTP_200_OK)
+        # return super().create(request, *args, **kwargs
+
+# import google.generativeai as genai
+# import os
+# from dotenv import load_dotenv
+# load_dotenv()
+# genai.configure(api_key=os.environ.get("API_KEY"))
+# class ChatbotViewSet(viewsets.ModelViewSet):
+#     authentication_classes = []
+#     permission_classes = []
+#     queryset=None
+#     def create(self, request, *args, **kwargs):
+#         prompt = request.data['prompt']
+# #         curl \
+# #   -H 'Content-Type: application/json' \
+# #   -d '{"contents":[{"parts":[{"text":"Explain how AI works"}]}]}' \
+# #   -X POST 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=YOUR_API_KEY'
+#         model = genai.GenerativeModel("gemini-1.5-flash")
+#         response = model.generate_content(prompt)
+#         # print(response.text)
+
+#         return Response(data=response.text,status=status.HTTP_200_OK)
+#         # return super().list(request, *args, **kwargs)
+
+# class TraverseViewSet(viewsets.ModelViewSet):
+#     authentication_classes = []
+#     permission_classes = []
+#     queryset=None
+#     def create(self, request, *args, **kwargs):
+#         # prompt = request.data['prompt']
+#         package_id = request.data['id']
+#         package =Package.objects.get(id=package_id)
+#         #         curl \
+#         #   -H 'Content-Type: application/json' \
+#         #   -d '{"contents":[{"parts":[{"text":"Explain how AI works"}]}]}' \
+#         #   -X POST 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=YOUR_API_KEY'
+#         model = genai.GenerativeModel("gemini-1.5-flash")
+#         prompt = f"I am going on the package(travel): {package.name}. It's description is {package.description}. Give required equipments and its price for this trip. Stricly only give me short points on what equipments i need. Nothing more nothing less.Parse data and give in 10 nice points. No extra text just the 10 points starting with 1,2,3 and so on.Dont say Here are 10 essential items for your Kathmandu Durbar Square trip"
+#         response = model.generate_content(prompt)
+#         # print(response.text)
+
+#         return Response(data=response.text,status=status.HTTP_200_OK)
+#         # return super().list(request, *args, **kwargs)
+
+class GuideViewSet(viewsets.ModelViewSet):
+    authentication_classes = []
+    permission_classes = []
+    queryset=Guide.objects.all()
+    serializer_class = GuideSerializer
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        base_user = {
+            "username": data["username"],
+            "password": data["password"],
+            "email": data["email"],
+        }
+        data["base_user"] = base_user
+        interests = data["interests"]
+        # print(interests)
+        # traveller_serializer.
+
+        data["interests"] = []
+        for interest in interests:
+            # print(interest)
+            data["interests"].append({"name": interest})
+
+        # data['interests']=None
+        # print(data)
+        # print(data['interests'])
+        guide_serializer = self.serializer_class(data=data)
+        guide_serializer.is_valid(raise_exception=True)
+        guide = guide_serializer.save()
+        print(guide)
+
+        return Response(status=status.HTTP_200_OK)
+        # return super().create(request, *args, **kwargs)
