@@ -18,6 +18,15 @@ from .models import (
 )
 
 from django.utils import timezone
+
+from core.machineLearning.model_cache import ModelCache
+from core.machineLearning.tokenizer_cache import TokenizerCache
+
+model = ModelCache.get_model()
+tokenizer = TokenizerCache.get_tokenizer()
+
+
+
 # Custom User admin (if needed for additional display configuration)
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -77,11 +86,93 @@ class PostCommentAdmin(admin.ModelAdmin):
     list_display=("id","comment","commented_by__username")
 
 
+from tf_keras.preprocessing.sequence import pad_sequences
+from django.utils.safestring import mark_safe
+import numpy as np
 @admin.register(Package)
 class PackageAdmin(admin.ModelAdmin):
-    list_display = ("id", "name",  "price", )
-    search_fields = ("name", )
+    list_display = ("id", "name", "price")
+    search_fields = ("name",)
     filter_horizontal = ("label",)
+    readonly_fields = ["reviews_chart"]
+
+    def reviews_chart(self, obj):
+        comments = PackageComment.objects.filter(package__id=obj.id).values_list("comment", flat=True)
+        if not comments:
+            return "No reviews available."
+
+        try:
+
+
+            # Prepare data
+            sequences = tokenizer.texts_to_sequences(comments)
+            test_review = pad_sequences(sequences, maxlen=600)
+
+            # Predict sentiments
+            predictions = model.predict(test_review)
+            sentiments = ["Negative", "Neutral", "Positive"]
+            sentiment_labels = [sentiments[np.argmax(pred)] for pred in predictions]
+
+            # Calculate percentages
+            positive_count = sentiment_labels.count("Positive")
+            negative_count = sentiment_labels.count("Negative")
+            neutral_count = sentiment_labels.count("Neutral")
+            total = len(sentiment_labels)
+
+            data = {
+                "Positive": round((positive_count / total) * 100, 2),
+                "Negative": round((negative_count / total) * 100, 2),
+                "Neutral": round((neutral_count / total) * 100, 2),
+            }
+
+            # Create the chart
+            chart_html = f"""
+                <canvas id="sentimentChart" width="400" height="400"></canvas>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script>
+                    const ctx = document.getElementById('sentimentChart').getContext('2d');
+                    new Chart(ctx, {{
+                        type: 'pie',
+                        data: {{
+                            labels: ['Positive', 'Negative', 'Neutral'],
+                            datasets: [{{
+                                label: 'Sentiment Analysis',
+                                data: [{data['Positive']}, {data['Negative']}, {data['Neutral']}],
+                                backgroundColor: [
+                                    'rgba(75, 192, 192, 0.6)',
+                                    'rgba(255, 99, 132, 0.6)',
+                                    'rgba(255, 206, 86, 0.6)'
+                                ],
+                                borderColor: [
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(255, 206, 86, 1)'
+                                ],
+                                borderWidth: 1
+                            }}]
+                        }},
+                        options: {{
+                            responsive: true,
+                            plugins: {{
+                                legend: {{
+                                    position: 'top',
+                                }},
+                                tooltip: {{
+                                    callbacks: {{
+                                        label: function(context) {{
+                                            return context.label + ': ' + context.raw + '%';
+                                        }}
+                                    }}
+                                }}
+                            }}
+                        }}
+                    }});
+                </script>
+            """
+            return mark_safe(chart_html)
+
+        except Exception as e:
+            return f"Error generating chart: {e}"
 
 @admin.register(PackageComment)
 class PackageCommentAdmin(admin.ModelAdmin):

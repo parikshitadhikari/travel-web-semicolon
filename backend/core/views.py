@@ -1,9 +1,10 @@
+from datetime import timezone
 from django.shortcuts import render
 from rest_framework import viewsets,status,permissions,authentication
 from rest_framework.response import Response
 from rest_framework.decorators import api_view,action
 
-from core.models import Business, Event, Guide, Package, PackageSubscription, Post, PostComment, Travellers, TraverseItem, User
+from core.models import Business, Event, Guide, Package, PackageComment, PackageSubscription, Post, PostComment, Travellers, TraverseItem, User
 from core.serializers import BusinessSerializer, EventInterestedSerializer, EventSerializer, GuideSerializer, PackageCommentSerializer, PackageSerializer, PackageSubscriptionSerializer, PostSerializer, TravellersSerializer, TraverseItemSerializer, UserSerializer
 from django.shortcuts import get_object_or_404
 from django.db.models import Count
@@ -304,12 +305,72 @@ class PackageViewSet(viewsets.ModelViewSet):
         post_comment.save()
         return Response(status=status.HTTP_200_OK)
 
-    @action(
-        methods=["GET"], permission_classes=[], authentication_classes=[], detail=False
-    )
-    def sentiment(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_501_NOT_IMPLEMENTED)
-        #not implemented
+    # @action(
+    #     methods=["GET"], permission_classes=[], authentication_classes=[], detail=False
+    # )
+    # def sentiment(self, request, *args, **kwargs):
+    #     data =request.data
+    #     id = data['id']
+    #     comments = PackageComment.objects.filter(package__id=id).values_list('comment',flat=True)
+    #     print(comments)
+    #     print(len(comments))
+    #     if(len(comments)==0):
+    #         return Response(status=status.HTTP_200_OK)
+
+
+    #         def predictions(df):
+    #             reviewText = df["reviewText"].tolist()
+    #             num = df.shape[0]
+    #             sequence = tokenizer.texts_to_sequences(reviewText)
+    #             test_review = pad_sequences(sequence, maxlen=max_len)
+
+    #             sentiment = []
+    #             print(df)
+    #             for i in range(num):
+    #                 eachsentiment = ["Negative", "Neutral", "Positive"][
+    #                     np.around(model.predict(test_review), decimals=4).argmax(axis=1)[i]
+    #                 ]
+    #                 sentiment.append(eachsentiment)
+
+    #             positiveCount = sentiment.count("Positive")
+    #             negativeCount = sentiment.count("Negative")
+    #             neutralCount = sentiment.count("Neutral")
+
+    #             positivePercentage = positiveCount / num
+    #             negativePercentage = negativeCount / num
+    #             neutralPercentage = neutralCount / num
+
+
+    #             resultDataDic = {"comments": {}}
+    #             for i, text in enumerate(reviewText):
+    #                 resultDataDic["comments"][text] = sentiment[i]
+
+    #             resultDataDic["Percentage"] = {
+    #                 "Positive": positivePercentage,
+    #                 "Negative": negativePercentage,
+    #                 "Neutral": neutralPercentage,
+    #             }
+    #             return resultDataDic
+    #             # with open(BASE_DIR / "machineLearning" / "output.json", "w") as outfile:
+    #             #     json.dump(resultDataDic, outfile)
+
+    #     except Exception as e:
+    #         print(f"An error occurred: {e}")
+
+    #     # Get the current time
+    #     current_time = timezone.now()
+
+    #     # Create a list of dictionaries for DataFrame
+    #     data = [{'reviewText': comment, 'reviewTime': current_time} for comment in comments]
+    #     if(data.count==0):
+    #         return Response(status=status.HTTP_200_OK)
+            
+    #     print(data)
+    #     # Create a pandas DataFrame from the data
+    #     df = pd.DataFrame(data)
+
+    #     json_result = predictions(df=df)
+    #     return Response(status=status.HTTP_200_OK, data=json_result)
 
 class EventViewSet(viewsets.ModelViewSet):
     authentication_classes = []
