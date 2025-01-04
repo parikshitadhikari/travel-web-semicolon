@@ -25,8 +25,9 @@ export default function ExpandableCardDemo() {
   const truncate = (input: string) =>
     input?.length > 10 ? `${input.substring(0, 10)}` : input;
 
-  const staticUsername = "Rohan"; // Static username for the API request
-
+  const userInfo = JSON.parse(localStorage.getItem("userInfo") as string);
+  // const staticUsername = userInfo.base_user.username; // Static username for the API request
+  const staticUsername = "username"
   // Fetch data from API and transform it to match the Card structure
   useEffect(() => {
     const fetchData = async () => {
@@ -58,6 +59,7 @@ export default function ExpandableCardDemo() {
         )
       );
 
+      console.log(card.id, staticUsername);
       // Send data to API (event ID and username)
       await axios.post("http://127.0.0.1:8000/auth/events/interested/", {
         id: card.id,
