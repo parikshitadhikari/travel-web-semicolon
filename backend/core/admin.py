@@ -37,7 +37,6 @@ class TravellersAdmin(admin.ModelAdmin):
     search_fields = ("base_user__username",)
     filter_horizontal = ("interests",)
 
-# Register Business
 
 # Register Guide
 @admin.register(Guide)
@@ -45,3 +44,18 @@ class GuideAdmin(admin.ModelAdmin):
     list_display = ("id", "base_user__username", "base_user__email")
     search_fields = ("base_user__username", "base_user__email")
     filter_horizontal = ("label",)
+
+# Register Event
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "description")
+    search_fields = ("name",)
+    filter_horizontal = ("label",)
+
+
+# Register EventLike
+@admin.register(EventInterested)
+class EventLikeAdmin(admin.ModelAdmin):
+    list_display = ("id", "event", "interested_user")
+    search_fields = ("event__name", "interested_user__username")
+
