@@ -7,13 +7,6 @@ interface Props {
 }
 
 const Modal = ({ children, isOpen, onClose }: Props) => {
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
-
   if (!isOpen) return null;
 
   const handleKeyDown = (event: KeyboardEvent) => {
@@ -21,6 +14,13 @@ const Modal = ({ children, isOpen, onClose }: Props) => {
       onClose();
     }
   };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   const handleOutsideClick = (event: React.MouseEvent) => {
     const target = event.target as HTMLElement;
