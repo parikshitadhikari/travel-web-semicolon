@@ -417,32 +417,21 @@ class EventViewSet(viewsets.ModelViewSet):
         methods=["POST"], permission_classes=[], authentication_classes=[], detail=False
     )
     def create_event(self, request, *args, **kwargs):
-
-
         data = request.data
         labels = data["label"]
-        labels = data["label"]
-        # print(interests)
-        # event_serializer.
-        data["created_by"] = User.objects.get(username=data["username"]).pk
 
         data["label"] = []
         data["created_by"] = User.objects.get(username=data["username"]).pk
 
-        data["label"] = []
         for label in labels:
-            # print(interest)
-            data["label"].append({"name": label})
-
             data["label"].append({"name": label})
 
         # data['interests']=None
         # print(data)
         # print(data['interests'])
         event_serializer = self.serializer_class(data=data)
-        event_serializer = self.serializer_class(data=data)
-        event_serializer.is_valid()
-        event = event_serializer.save()
+        event_serializer.is_valid(raise_exception=True)
+        event_serializer.save()
         # print(event)
 
         return Response(status=status.HTTP_200_OK)
