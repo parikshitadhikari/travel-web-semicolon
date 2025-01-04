@@ -119,6 +119,11 @@ REST_FRAMEWORK = {
     }
 
 
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Add your frontend URL here
+]
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
