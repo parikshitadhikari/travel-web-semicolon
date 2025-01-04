@@ -235,6 +235,12 @@ Handles event-related operations.
     }
     ```
 - **GET** `auth/events/interested/`
+- - **Request Body:**
+    ```json
+    {
+      "id": id of the event in number
+    }
+    ```
 - -Returns a list of interested users
 
 ## ChatViewSet (chat)
