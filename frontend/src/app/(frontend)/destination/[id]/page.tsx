@@ -48,9 +48,11 @@ const PlaceDetails = () => {
 
   useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
+    // console.log(userInfo)
     if (userInfo) {
       const parsedUserInfo = JSON.parse(userInfo);
-      setUsername(parsedUserInfo.username);
+      // console.log(parsedUserInfo)
+      setUsername(parsedUserInfo.base_user.username);
     }
   }, []);
 
