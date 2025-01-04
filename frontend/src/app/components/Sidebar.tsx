@@ -1,190 +1,177 @@
 "use client";
+import React, { useEffect, useState } from "react";
+import {
+  Sidebar,
+  SidebarBody,
+  SidebarLink,
+} from "../../../src/components/ui/sidebar";
+import {
+  IconAi,
+  IconAnalyze,
+  IconArrowGuide,
+  IconArrowLeft,
+  IconBrandTabler,
+  IconCalendarEvent,
+  IconChartArcs,
+  IconMoneybag,
+  IconMountain,
+  IconSettings,
+  IconUserBolt,
+} from "@tabler/icons-react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
-import Link, { LinkProps } from "next/link";
-import React, { useState, createContext, useContext } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { IconMenu2, IconX } from "@tabler/icons-react";
 
-interface Links {
-  label: string;
-  href: string;
-  icon: React.JSX.Element | React.ReactNode;
-}
+export default function SidebarDemo() {
+  const [userData, setUserData] = useState<any>({
+    username: "",
+    email: "",
+    password: "",
+    interests: [],
+    mood: "",
+  });
+  useEffect(() => {
+    const storedData = localStorage.getItem("userInfo");
+    console.log(storedData);
+    if (storedData) {
+      setUserData(JSON.parse(storedData));
+    }
+  }, []);
+  const links = [
+    {
+      label: "Community",
+      href: "/community-post", // Updated with a route
+      icon: (
+        <IconBrandTabler className="text-neutral-200 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+    },
+    {
+      label: "Destination",
+      href: "/destination", // Updated with a route
+      icon: (
+        <IconMountain className="text-neutral-200 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+    },
+    {
+      label: "Events",
+      href: "/event", // Updated with a route
+      icon: (
+        <IconCalendarEvent className="text-neutral-200 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+    },
+    {
+      label: "Travel AI",
+      href: "/travelAI", // Updated with a route
+      icon: (
+        <IconAi className="text-neutral-200 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+    },
+    {
+      label: "Guide",
+      href: "/guide", // Yet t0 update with a route
+      icon: (
+        <IconArrowGuide className="text-neutral-200 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+    },
+    {
+      label: "Traverce",
+      href: "/traverce", // Yet to update with a route
+      icon: (
+        <IconMoneybag className="text-neutral-200 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+    },
 
-interface SidebarContextProps {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  animate: boolean;
-}
+    {
+      label: "Financial Tracker",
+      href: "/tracker", // Updated with a route
+      icon: (
+        <IconChartArcs className="text-neutral-200 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+    },
+    {
+      label: "Profile",
+      href: "/user", // Updated with a route
+      icon: (
+        <IconUserBolt className="text-neutral-200 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+    },
+    {
+      label: "Logout",
+      href: "/", // Updated with a route
+      icon: (
+        <IconArrowLeft className="text-neutral-200 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+    },
+  ];
 
-const SidebarContext = createContext<SidebarContextProps | undefined>(
-  undefined
-);
+  const [open, setOpen] = useState(false);
 
-export const useSidebar = () => {
-  const context = useContext(SidebarContext);
-  if (!context) {
-    throw new Error("useSidebar must be used within a SidebarProvider");
-  }
-  return context;
-};
-
-export const SidebarProvider = ({
-  children,
-  open: openProp,
-  setOpen: setOpenProp,
-  animate = true,
-}: {
-  children: React.ReactNode;
-  open?: boolean;
-  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-  animate?: boolean;
-}) => {
-  const [openState, setOpenState] = useState(false);
-
-  const open = openProp !== undefined ? openProp : openState;
-  const setOpen = setOpenProp !== undefined ? setOpenProp : setOpenState;
-
-  return (
-    <SidebarContext.Provider value={{ open, setOpen, animate: animate }}>
-      {children}
-    </SidebarContext.Provider>
-  );
-};
-
-export const Sidebar = ({
-  children,
-  open,
-  setOpen,
-  animate,
-}: {
-  children: React.ReactNode;
-  open?: boolean;
-  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-  animate?: boolean;
-}) => {
-  return (
-    <SidebarProvider open={open} setOpen={setOpen} animate={animate}>
-      {children}
-    </SidebarProvider>
-  );
-};
-
-export const SidebarBody = (props: React.ComponentProps<typeof motion.div>) => {
-  return (
-    <>
-      <DesktopSidebar {...props} />
-      <MobileSidebar {...(props as React.ComponentProps<"div">)} />
-    </>
-  );
-};
-
-export const DesktopSidebar = ({
-  className,
-  children,
-  ...props
-}: React.ComponentProps<typeof motion.div>) => {
-  const { open, setOpen, animate } = useSidebar();
-  return (
-    <>
-      <motion.div
-        className={cn(
-          "h-full px-4 py-4 hidden  md:flex md:flex-col bg-neutral-800 w-[300px] flex-shrink-0",
-          className
-        )}
-        animate={{
-          width: animate ? (open ? "300px" : "60px") : "300px",
-        }}
-        onMouseEnter={() => setOpen(true)}
-        onMouseLeave={() => setOpen(false)}
-        {...props}
-      >
-        {children}
-      </motion.div>
-    </>
-  );
-};
-
-export const MobileSidebar = ({
-  className,
-  children,
-  ...props
-}: React.ComponentProps<"div">) => {
-  const { open, setOpen } = useSidebar();
   return (
     <>
       <div
         className={cn(
-          "h-10 px-4 py-4 flex flex-row md:hidden  items-center justify-between bg-neutral-100 dark:bg-neutral-800 w-full"
+          "fixed top-0 left-0 h-screen w-[60px] hover:w-[260px] transition-width duration-300 ease-in-out bg-gray-100 dark:bg-neutral-800 border-r border-neutral-200 dark:border-neutral-700 overflow-hidden"
         )}
-        {...props}
       >
-        <div className="flex justify-end z-20 w-full">
-          <IconMenu2
-            className="text-neutral-200 dark:text-neutral-200"
-            onClick={() => setOpen(!open)}
-          />
-        </div>
-        <AnimatePresence>
-          {open && (
-            <motion.div
-              initial={{ x: "-100%", opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: "-100%", opacity: 0 }}
-              transition={{
-                duration: 0.3,
-                ease: "easeInOut",
-              }}
-              className={cn(
-                "fixed h-full w-full inset-0 bg-white dark:bg-neutral-900 p-10 z-[100] flex flex-col justify-between",
-                className
-              )}
-            >
-              <div
-                className="absolute right-10 top-10 z-50 text-neutral-200 dark:text-neutral-200"
-                onClick={() => setOpen(!open)}
-              >
-                <IconX />
+        <Sidebar open={open} setOpen={setOpen}>
+          <SidebarBody className="justify-between gap-10">
+            <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+              <div className="mt-8 flex flex-col gap-2">
+                {links.map((link, idx) => (
+                  <SidebarLink key={idx} link={link} />
+                ))}
               </div>
-              {children}
-            </motion.div>
-          )}
-        </AnimatePresence>
+            </div>
+            <div>
+              <SidebarLink
+                link={{
+                  label: userData?.username || "Traveler",
+                  href: "#",
+                  icon: (
+                    <img
+                      src={"/images/profile.png"}
+                      className="h-7 w-7 flex-shrink-0 rounded-full"
+                      width={50}
+                      height={50}
+                      alt="Avatar"
+                    />
+                  ),
+                }}
+              />
+            </div>
+          </SidebarBody>
+        </Sidebar>
       </div>
     </>
   );
-};
+}
 
-export const SidebarLink = ({
-  link,
-  className,
-  ...props
-}: {
-  link: Links;
-  className?: string;
-  props?: LinkProps;
-}) => {
-  const { open, animate } = useSidebar();
+export const Logo = () => {
   return (
     <Link
-      href={link.href}
-      className={cn(
-        "flex items-center justify-start gap-2  group/sidebar py-2",
-        className
-      )}
-      {...props}
+      href="#"
+      className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
     >
-      {link.icon}
-
+      <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
       <motion.span
-        animate={{
-          display: animate ? (open ? "inline-block" : "none") : "inline-block",
-          opacity: animate ? (open ? 1 : 0) : 1,
-        }}
-        className="text-neutral-200 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="font-medium text-black dark:text-white whitespace-pre"
       >
-        {link.label}
+        TravelWeb
       </motion.span>
+    </Link>
+  );
+};
+
+export const LogoIcon = () => {
+  return (
+    <Link
+      href="#"
+      className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
+    >
+      <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
     </Link>
   );
 };
