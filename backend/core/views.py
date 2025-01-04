@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view,action
 
 from core.models import Business, Event, Guide, Package, PackageSubscription, Post, PostComment, Travellers, User
 from core.serializers import BusinessSerializer, EventInterestedSerializer, EventSerializer, GuideSerializer, PackageCommentSerializer, PackageSerializer, PackageSubscriptionSerializer, PostSerializer, TravellersSerializer, UserSerializer
-
+from django.shortcuts import get_object_or_404
 from django.db.models import Count
 
 # Create your views here.
@@ -55,7 +55,8 @@ class PostViewSet(viewsets.ModelViewSet):
         #     'password':data['password'],
         #     'email':data['email']
         # }
-        data["base_user"] = User.objects.get(username=data["username"]).pk
+        # data["base_user"] = User.objects.get(username=data["username"]).pk
+        data["base_user"]= get_object_or_404(User, username = data['username']).pk
         data["label"] = []
         for label in labels:
             # print(interest)
