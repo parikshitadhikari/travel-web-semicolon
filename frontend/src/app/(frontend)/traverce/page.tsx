@@ -40,7 +40,7 @@ const Traverce: React.FC = () => {
           Travel Ecommerce
         </h1>
         {loading ? (
-          <p className="text-center text-white">Loading destinations...</p>
+          <p className="text-center text-white">Loading items for your destination...</p>
         ) : tripDetails.length > 0 ? (
           <FocusCards cards={tripDetails} />
         ) : (
